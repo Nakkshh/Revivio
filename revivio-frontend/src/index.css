@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-bg: #F5F7F8;
+    --color-surface: #FFFFFF;
+    --color-surface-elevated: #FFFFFF;
+    --color-surface-sunken: #EEF2F6;
+    --color-text: #142B3B;
+    --color-text-secondary: #5A6E7F;
+    --color-text-tertiary: #8C9EA9;
+    --color-border: #E5EAF0;
+    --color-border-strong: #CBD5E1;
+    --color-accent: #27C6A5;
+    --color-accent-hover: #1FA688;
+    --color-accent-subtle: #EDFAF7;
+    --color-navy: #142B3B;
+  }
+
+  .dark {
+    --color-bg: #101E2C;
+    --color-surface: #172A3A;
+    --color-surface-elevated: #1C3040;
+    --color-surface-sunken: #0B1621;
+    --color-text: #F5F8FA;
+    --color-text-secondary: #9EB2C2;
+    --color-text-tertiary: #6B8294;
+    --color-border: #24384A;
+    --color-border-strong: #364E63;
+    --color-accent: #27C6A5;
+    --color-accent-hover: #35D4B3;
+    --color-accent-subtle: #0D2E28;
+    --color-navy: #F5F8FA;
+  }
+
+  * {
+    box-sizing: border-box;
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    transition: background-color 200ms ease, color 200ms ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

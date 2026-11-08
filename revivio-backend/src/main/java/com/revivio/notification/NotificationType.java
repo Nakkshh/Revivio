@@ -1,0 +1,12 @@
+package com.revivio.notification;
+
+public enum NotificationType {
+    PRODUCT_REGISTERED,
+    WARRANTY_VERIFIED,
+    REPAIR_SUBMITTED,
+    REPAIR_APPROVED,
+    REPAIR_REJECTED,
+    TECHNICIAN_ASSIGNED,
+    REPAIR_STATUS_CHANGED,
+    REPAIR_COMPLETED
+}

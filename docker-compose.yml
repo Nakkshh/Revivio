@@ -1,0 +1,69 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: revivio-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-revivio_db}
+      POSTGRES_USER: ${DB_USERNAME:-revivio_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-revivio_pass}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-revivio_user} -d ${DB_NAME:-revivio_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - revivio-network
+
+  backend:
+    build:
+      context: ./revivio-backend
+      dockerfile: Dockerfile
+    container_name: revivio-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-revivio_db}
+      DB_USERNAME: ${DB_USERNAME:-revivio_user}
+      DB_PASSWORD: ${DB_PASSWORD:-revivio_pass}
+      JWT_SECRET: ${JWT_SECRET:-revivio-dev-secret-key-must-be-changed-in-production-min-256-bits}
+      STORAGE_PATH: /app/uploads
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8080:8080"
+    volumes:
+      - uploads_data:/app/uploads
+    networks:
+      - revivio-network
+
+  frontend:
+    build:
+      context: ./revivio-frontend
+      dockerfile: Dockerfile
+    container_name: revivio-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+      - "5173:80"
+    networks:
+      - revivio-network
+
+volumes:
+  postgres_data:
+    driver: local
+  uploads_data:
+    driver: local
+
+networks:
+  revivio-network:
+    driver: bridge
